@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "800304827206",
+    "firebase_url": "https://vuv-slicice-f5541-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "vuv-slicice-f5541",
+    "storage_bucket": "vuv-slicice-f5541.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800304827206:android:d5b0bd1b05b4c2ea0ab347",
+        "android_client_info": {
+          "package_name": "com.example.vuv_slicice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCAvQvIdTx1VtfpX4XQ5wMIt8iClhQ47Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

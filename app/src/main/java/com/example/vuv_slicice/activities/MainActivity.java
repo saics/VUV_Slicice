@@ -1,4 +1,4 @@
-package com.example.vuv_slicice;
+package com.example.vuv_slicice.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
-import com.google.firebase.FirebaseApp;
+import com.example.vuv_slicice.models.Album;
+import com.example.vuv_slicice.adapters.AlbumAdapter;
+import com.example.vuv_slicice.utils.ItemOffsetDecoration;
+import com.example.vuv_slicice.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.recycler_view);
+        int offsetPx = getResources().getDimensionPixelSize(R.dimen.default_offset);
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(offsetPx);
+        recyclerView.addItemDecoration(itemDecoration);
         albumAdapter = new AlbumAdapter(this, new ArrayList<>());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

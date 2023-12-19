@@ -1,4 +1,4 @@
-package com.example.vuv_slicice;
+package com.example.vuv_slicice.models;
 
 import java.util.HashMap;
 import java.util.Map;

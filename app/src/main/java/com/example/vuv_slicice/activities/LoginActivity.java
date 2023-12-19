@@ -1,6 +1,5 @@
-package com.example.vuv_slicice;
+package com.example.vuv_slicice.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vuv_slicice.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -18,6 +18,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameEditText, passwordEditText;
     private Button loginButton;
+    private Button buttona;
     private TextView signupRedirectText;
 
     @Override
@@ -28,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText = findViewById(R.id.login_username);
         passwordEditText = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
+        buttona = findViewById(R.id.buttona);
         signupRedirectText = findViewById(R.id.signupRedirectText);
 
         loginButton.setOnClickListener(view -> loginUser());
@@ -35,6 +37,14 @@ public class LoginActivity extends AppCompatActivity {
         signupRedirectText.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
             startActivity(intent);
+        });
+
+        buttona.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
         });
     }
 

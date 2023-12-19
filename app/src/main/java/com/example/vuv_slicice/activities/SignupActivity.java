@@ -1,4 +1,4 @@
-package com.example.vuv_slicice;
+package com.example.vuv_slicice.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vuv_slicice.R;
+import com.example.vuv_slicice.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;

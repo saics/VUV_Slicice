@@ -1,4 +1,4 @@
-package com.example.vuv_slicice;
+package com.example.vuv_slicice.models;
 public class Album {
     private String name;
     private String image;

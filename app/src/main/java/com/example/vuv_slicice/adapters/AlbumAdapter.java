@@ -1,4 +1,4 @@
-package com.example.vuv_slicice;
+package com.example.vuv_slicice.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.vuv_slicice.models.Album;
+import com.example.vuv_slicice.R;
 
 import java.util.List;
 

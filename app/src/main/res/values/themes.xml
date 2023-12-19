@@ -2,7 +2,19 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.VUV_Slicice" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/Orange</item>
+        <item name="colorPrimaryVariant">@color/Orange</item>
+        <item name="colorOnPrimary">@color/Black</item>
+        <item name="colorSecondary">@color/Orange</item>
+        <item name="colorSecondaryVariant">@color/Orange</item>
+        <item name="colorOnSecondary">@color/Black</item>
+        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
+        <item name="android:windowLightStatusBar" >true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds" >true</item>
+        <item name="android:windowTranslucentStatus" >false</item>
+        <item name="android:windowTranslucentNavigation" >false</item>
+        <item name="android:windowContentTransitions" >true</item>
+
     </style>
 
     <style name="Theme.VUV_Slicice" parent="Base.Theme.VUV_Slicice" />

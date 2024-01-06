@@ -88,6 +88,6 @@
         android:id="@+id/buttona"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Test button" />
 
 </LinearLayout>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/pagebkg"
+    tools:context=".activities.AlbumDetailsActivity">
+
+    <!-- Album Image -->
+    <ImageView
+        android:id="@+id/album_image"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop" />
+
+    <!-- Album Name -->
+    <TextView
+        android:id="@+id/album_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/album_image"
+        android:padding="16dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="#000" />
+
+    <!-- Card Statistics -->
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/album_name"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <!-- Total Cards -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/statistic_box_background"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/total_cards_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Total cards: 0"
+                android:textColor="#FFF"
+                android:textSize="18sp" />
+        </FrameLayout>
+
+        <!-- Your Cards -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/statistic_box_background"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/user_cards_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Your cards: 0"
+                android:textColor="#FFF"
+                android:textSize="18sp" />
+        </FrameLayout>
+
+        <!-- Duplicates -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/statistic_box_background"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/duplicate_cards_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Duplicates: 0"
+                android:textColor="#FFF"
+                android:textSize="18sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- RecyclerView for cards -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cards_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="324dp"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="-1dp"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical" />
+
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package com.example.vuv_slicice.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.vuv_slicice.activities.AlbumDetailsActivity;
+import com.example.vuv_slicice.fragments.AlbumDetailsFragment;
 import com.example.vuv_slicice.models.Album;
 import com.example.vuv_slicice.R;
 
@@ -41,6 +46,16 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         Glide.with(context)
                 .load(album.getImage())
                 .into(holder.albumImage);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, AlbumDetailsActivity.class);
+                intent.putExtra("albumName", album.getName());
+                intent.putExtra("albumImage", album.getImage());
+                intent.putExtra("albumId", album.getId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

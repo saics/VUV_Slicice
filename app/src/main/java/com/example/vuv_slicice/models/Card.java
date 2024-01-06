@@ -1,31 +1,20 @@
 package com.example.vuv_slicice.models;
 
-import java.util.List;
-
-public class Album {
+public class Card {
     private String id;
     private String name;
     private String image;
-    private List<String> cardIds;
+    private int quantity;
 
-    public Album() {
+    public Card() {
         // Default constructor required for Firebase
     }
 
-    public Album(String id, String name, String image, List<String> cardIds) {
+    public Card(String id, String name, String image) {
         this.id = id;
         this.name = name;
         this.image = image;
-        this.cardIds = cardIds;
-    }
-
-
-    public List<String> getCardIds() {
-        return cardIds;
-    }
-
-    public void setCardIds(List<String> cardIds) {
-        this.cardIds = cardIds;
+        this.quantity = 0;
     }
 
     public String getId() {
@@ -35,12 +24,28 @@ public class Album {
     public void setId(String id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getImage() {
         return image;
     }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }
+

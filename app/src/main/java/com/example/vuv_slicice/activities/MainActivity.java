@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot albumSnapshot : snapshot.getChildren()) {
                     Album album = albumSnapshot.getValue(Album.class);
                     if (album != null) {
+                        album.setId(albumSnapshot.getKey()); // Set the album ID
                         albumList.add(album);
                     }
                 }

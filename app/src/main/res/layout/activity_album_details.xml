@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Total cards: 0"
+                android:text="Ukupno: 0"
                 android:textColor="#FFF"
                 android:textSize="18sp" />
         </FrameLayout>
@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Your cards: 0"
+                android:text="Imaš: 0"
                 android:textColor="#FFF"
                 android:textSize="18sp" />
         </FrameLayout>
@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Duplicates: 0"
+                android:text="Duplikati: 0"
                 android:textColor="#FFF"
                 android:textSize="18sp" />
         </FrameLayout>

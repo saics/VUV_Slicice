@@ -52,8 +52,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
         Glide.with(context)
                 .load(card.getImage())
-                .error(R.drawable.default_image) // Add a default image in case of error
-                .placeholder(R.drawable.default_image) // Add a placeholder image while loading
+                .error(R.drawable.default_image)
+                .placeholder(R.drawable.default_image)
                 .into(holder.cardImageView);
 
 

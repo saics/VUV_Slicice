@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/pagebkg"
+    android:padding="16dp">
+
+    <!-- Visual Representation of Album Cover and Name -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:id="@+id/image_preview"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_image" />
+
+        <TextView
+            android:id="@+id/text_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#85000000"
+            android:textColor="@android:color/white"
+            android:text="Album Name"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="10dp"/>
+    </FrameLayout>
+
+    <!-- Input for Album Name -->
+    <EditText
+        android:id="@+id/album_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Album Name"
+        android:padding="10dp"/>
+
+    <!-- Buttons for Photo Selection -->
+    <Button
+        android:id="@+id/button_take_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take Photo"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:id="@+id/button_select_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select from Gallery"
+        android:layout_marginTop="10dp"/>
+
+    <!-- Save Button -->
+    <Button
+        android:id="@+id/button_save_album"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Album"
+        android:layout_marginTop="20dp"/>
+</LinearLayout>

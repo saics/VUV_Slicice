@@ -8,21 +8,21 @@ public class User {
     private String name;
     private String email;
     private String username;
-    private Map<String, Map<String, Integer>> collection; // Map of albums and their card counts
+    private boolean isAdmin;
+    private Map<String, Map<String, Integer>> collection;
 
-    // Default constructor required for Firebase
     public User() {
+        // Default constructor required for Firebase
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public User(String name, String email, String username) {
+    public User(String name, String email, String username, boolean isAdmin) {
         this.name = name;
         this.email = email;
         this.username = username;
+        this.isAdmin = isAdmin;
         this.collection = new HashMap<>();
     }
-
-    // Getter and setter methods...
 
     public String getName() {
         return name;
@@ -46,6 +46,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public Map<String, Map<String, Integer>> getCollection() {

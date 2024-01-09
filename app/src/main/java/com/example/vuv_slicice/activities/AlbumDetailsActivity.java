@@ -41,18 +41,17 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_details);
 
-        // Initialize UI components
         initializeUI();
 
         albumId = getIntent().getStringExtra("albumId");
         if (albumId == null) {
-            // Handle null albumId
+            //TODO: Handle missing album ID
             return;
         }
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            // Handle not logged in user
+            //TODO: Handle user not logged in
             return;
         }
         String userId = user.getUid();
@@ -141,7 +140,7 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
                         card.setQuantity(quantity != null ? quantity : 0);
                     }
                 }
-                cardAdapter.notifyDataSetChanged(); // Notify after all updates
+                cardAdapter.notifyDataSetChanged();
                 updateStatsUI();
             }
 
@@ -185,9 +184,9 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
         TextView userCardsTextView = findViewById(R.id.user_cards_textview);
         TextView duplicateCardsTextView = findViewById(R.id.duplicate_cards_textview);
 
-        totalCardsTextView.setText("Total cards: " + totalCardsInAlbum);
-        userCardsTextView.setText("Your cards: " + userCardsInAlbum);
-        duplicateCardsTextView.setText("Duplicates: " + duplicateCards);
+        totalCardsTextView.setText("Ukupno: " + totalCardsInAlbum);
+        userCardsTextView.setText("Imaš: " + userCardsInAlbum);
+        duplicateCardsTextView.setText("Duplikati: " + duplicateCards);
     }
 
     private int calculateDuplicates() {

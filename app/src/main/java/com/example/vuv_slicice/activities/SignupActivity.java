@@ -7,11 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.vuv_slicice.R;
 import com.example.vuv_slicice.models.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -26,58 +24,92 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        initializeUI();
+        setupListeners();
+    }
+
+    private void initializeUI() {
         nameEditText = findViewById(R.id.signup_name);
         emailEditText = findViewById(R.id.signup_email);
         usernameEditText = findViewById(R.id.signup_username);
         passwordEditText = findViewById(R.id.signup_password);
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
-
-        signupButton.setOnClickListener(view -> signupUser());
-
-        loginRedirectText.setOnClickListener(view -> {
-            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish(); // Finish the SignupActivity to prevent going back to it
-        });
     }
 
-    private void signupUser() {
+    private void setupListeners() {
+        signupButton.setOnClickListener(view -> attemptSignup());
+        loginRedirectText.setOnClickListener(view -> navigateToLoginActivity());
+    }
+
+    private void attemptSignup() {
         String name = nameEditText.getText().toString().trim();
         String email = emailEditText.getText().toString().trim();
         String username = usernameEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
-        // TODO: Add Firebase Authentication logic for signup
+        if (!validateInputs(name, email, username, password)) return;
+
+        signupButton.setEnabled(false);
+        // TODO: Show loading indicator
+
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
+                    signupButton.setEnabled(true);
+                    // TODO: Hide loading indicator
+
                     if (task.isSuccessful()) {
-                        // Signup successful
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                        // TODO: Add user data to Realtime Database
-                        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
-                        String uid = user.getUid();
-
-                        // Create a new user object with the provided name and email
-                        User newUser = new User(name, email, username);
-
-                        // Add the new user to the "users" node using the UID as the key
-                        usersRef.child(uid).setValue(newUser);
-
-                        // Handle successful signup
-                        Toast.makeText(SignupActivity.this, "Registration successful.", Toast.LENGTH_SHORT).show();
-
-                        // Navigate to the LoginActivity
-                        Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish(); // Finish the SignupActivity so that pressing back won't go back to it
+                        saveUserData(name, email, username);
                     } else {
-                        // If signup fails, display a message to the user.
-                        Toast.makeText(SignupActivity.this, "Registration failed. Please try again.",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignupActivity.this, "Registration failed: " + task.getException().getMessage(),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
     }
-}
 
+    private boolean validateInputs(String name, String email, String username, String password) {
+        if (name.isEmpty()) {
+            Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Enter a valid email address", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (username.isEmpty()) {
+            Toast.makeText(this, "Username cannot be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (password.isEmpty() || password.length() < 6) {
+            Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+
+    private void saveUserData(String name, String email, String username) {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        User newUser = new User(name, email, username, false);
+
+        usersRef.child(uid).setValue(newUser)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(SignupActivity.this, "Registration successful.", Toast.LENGTH_SHORT).show();
+                        navigateToLoginActivity();
+                    } else {
+                        Toast.makeText(SignupActivity.this, "Failed to save user data.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void navigateToLoginActivity() {
+        Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+}

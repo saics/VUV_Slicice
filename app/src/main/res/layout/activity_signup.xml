@@ -29,7 +29,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign Up"
+                android:text="Registracija"
                 android:textAlignment="center"
                 android:textColor="@color/Orange"
                 android:textSize="36sp"
@@ -43,7 +43,7 @@
                 android:background="@drawable/blue_border"
                 android:drawableLeft="@drawable/baseline_person_24"
                 android:drawablePadding="8dp"
-                android:hint="Name"
+                android:hint="Ime"
                 android:padding="8dp"
                 android:textColor="@color/Black" />
 
@@ -68,7 +68,7 @@
                 android:background="@drawable/blue_border"
                 android:drawableLeft="@drawable/baseline_person_pin_24"
                 android:drawablePadding="8dp"
-                android:hint="Username"
+                android:hint="Nadimak"
                 android:padding="8dp"
                 android:textColor="@color/Black" />
 
@@ -80,7 +80,7 @@
                 android:background="@drawable/blue_border"
                 android:drawableLeft="@drawable/baseline_lock_24"
                 android:drawablePadding="8dp"
-                android:hint="Password"
+                android:hint="Lozinka"
                 android:inputType="textPassword"
                 android:padding="8dp"
                 android:textColor="@color/Black" />
@@ -91,7 +91,7 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
                 android:backgroundTint="@color/Orange"
-                android:text="Sign Up"
+                android:text="Registriraj se"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />
 
@@ -102,7 +102,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:padding="8dp"
-                android:text="Already an user? Login"
+                android:text="Već ste registrirani? Klikni ovdje!"
                 android:textColor="@color/Orange"
                 android:textSize="18sp" />
 

@@ -27,7 +27,7 @@
             android:padding="10dp"
             android:background="#85000000"
             android:textColor="@android:color/white"
-            android:text="Album Name"
+            android:text="Ime albuma"
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -44,6 +44,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:padding="8dp" />
+
+        <ImageView
+            android:id="@+id/edit_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/edit_icon"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/delete_icon"
+            app:layout_constraintBottom_toBottomOf="@id/delete_icon"
+            android:padding="8dp" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

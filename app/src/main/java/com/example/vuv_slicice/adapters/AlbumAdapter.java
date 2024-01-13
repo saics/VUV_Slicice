@@ -23,16 +23,22 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     private Context context;
     private boolean isAdmin;
     private OnAlbumDeleteListener deleteListener;
+    private OnAlbumEditListener editListener;
 
     public interface OnAlbumDeleteListener {
         void onDeleteAlbum(String albumId);
     }
 
-    public AlbumAdapter(Context context, List<Album> albums, boolean isAdmin, OnAlbumDeleteListener deleteListener) {
+    public interface OnAlbumEditListener {
+        void onEditAlbum(String albumId);
+    }
+
+    public AlbumAdapter(Context context, List<Album> albums, boolean isAdmin, OnAlbumDeleteListener deleteListener, OnAlbumEditListener editListener) {
         this.context = context;
         this.albums = albums;
         this.isAdmin = isAdmin;
         this.deleteListener = deleteListener;
+        this.editListener = editListener;
     }
     @NonNull
     @Override
@@ -44,8 +50,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Album album = albums.get(position);
-
-        holder.albumName.setText(album.getName());
+        holder.bind(album, deleteListener, editListener, isAdmin);
 
         if (isAdmin) {
             holder.deleteIcon.setVisibility(View.VISIBLE);
@@ -87,13 +92,37 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView albumName;
-        ImageView albumImage, deleteIcon;
+        ImageView albumImage, deleteIcon, editIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             albumName = itemView.findViewById(R.id.album_name);
             albumImage = itemView.findViewById(R.id.album_image);
             deleteIcon = itemView.findViewById(R.id.delete_icon);
+            editIcon = itemView.findViewById(R.id.edit_icon);
+        }
+        void bind(final Album album, final OnAlbumDeleteListener deleteListener, final OnAlbumEditListener editListener, boolean isAdmin) {
+            albumName.setText(album.getName());
+            Glide.with(itemView.getContext()).load(album.getImage()).into(albumImage);
+
+            if (isAdmin) {
+                deleteIcon.setVisibility(View.VISIBLE);
+                deleteIcon.setOnClickListener(v -> {
+                    if (deleteListener != null) {
+                        deleteListener.onDeleteAlbum(album.getId());
+                    }
+                });
+
+                editIcon.setVisibility(View.VISIBLE);
+                editIcon.setOnClickListener(v -> {
+                    if (editListener != null) {
+                        editListener.onEditAlbum(album.getId());
+                    }
+                });
+            } else {
+                deleteIcon.setVisibility(View.GONE);
+                editIcon.setVisibility(View.GONE);
+            }
         }
     }
 }

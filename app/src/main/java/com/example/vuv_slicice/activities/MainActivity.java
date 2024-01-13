@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAlbumDeleteListener {
+public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAlbumDeleteListener, AlbumAdapter.OnAlbumEditListener {
     private RecyclerView recyclerView;
     private AlbumAdapter albumAdapter;
     private FloatingActionButton fabAddAlbum;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
         int offsetPx = getResources().getDimensionPixelSize(R.dimen.default_offset);
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(offsetPx);
         recyclerView.addItemDecoration(itemDecoration);
-        albumAdapter = new AlbumAdapter(this, new ArrayList<>(), isAdmin, this);
+        albumAdapter = new AlbumAdapter(this, new ArrayList<>(), isAdmin, this, this);
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -119,11 +119,11 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
         DatabaseReference albumRef = FirebaseDatabase.getInstance().getReference("albums").child(albumId);
         albumRef.removeValue().addOnSuccessListener(aVoid -> {
 
-            Toast.makeText(this, "Album deleted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Album obrisan", Toast.LENGTH_SHORT).show();
             fetchAlbumsData();
         }).addOnFailureListener(e -> {
 
-            Toast.makeText(this, "Failed to delete album", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Greška brisanja albuma", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -137,6 +137,13 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
                 .show();
     }
 
+    @Override
+    public void onEditAlbum(String albumId) {
+        Intent intent = new Intent(MainActivity.this, CreateAlbumActivity.class);
+        intent.putExtra("albumId", albumId);
+        intent.putExtra("mode", "edit");
+        startActivity(intent);
+    }
 
     private void checkIfUserIsAdmin() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -148,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
                     Boolean adminFlag = dataSnapshot.child("isAdmin").getValue(Boolean.class);
                     isAdmin = adminFlag != null && adminFlag;
 
-                    albumAdapter = new AlbumAdapter(MainActivity.this, new ArrayList<>(), isAdmin, MainActivity.this);
+                    albumAdapter = new AlbumAdapter(MainActivity.this, new ArrayList<>(), isAdmin, MainActivity.this, MainActivity.this);
                     recyclerView.setAdapter(albumAdapter);
                     fetchAlbumsData();
 

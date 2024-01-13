@@ -5,6 +5,7 @@ public class Card {
     private String name;
     private String image;
     private int quantity;
+    private boolean isSelected = false;
 
     public Card() {
         // Default constructor required for Firebase
@@ -47,5 +48,9 @@ public class Card {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public boolean isSelected() {return isSelected;}
+
+    public void setSelected(boolean selected) {isSelected = selected;}
 }
 

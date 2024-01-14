@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.vuv_slicice.R;
 import com.example.vuv_slicice.adapters.CardAdapter;
+import com.example.vuv_slicice.fragments.AddCardFragment;
 import com.example.vuv_slicice.fragments.SelectCardFragment;
 import com.example.vuv_slicice.models.Card;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -241,16 +242,23 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
         builder.show();
     }
 
-    private void addExistingCard() {
-        SelectCardFragment selectCardFragment = SelectCardFragment.newInstance(albumId);
-        selectCardFragment.show(getSupportFragmentManager(), "selectCardFragment");
-    }
-
-
     private void openCreateCardDialog() {
-        //TODO:Similar to openAddCardDialog, but for creating a new card
-        // After creating a new card, add it to both 'cards' and the specific 'album' in Firebase
+        AddCardFragment addCardFragment = new AddCardFragment();
+        Bundle args = new Bundle();
+        args.putString("albumId", albumId); // Pass the albumId to the fragment
+        addCardFragment.setArguments(args);
+
+        // Set a listener to refresh the album cards list after adding a new card
+        addCardFragment.setOnCardCreatedListener(newCard -> {
+            if (newCard != null) {
+                cards.add(newCard);
+                cardAdapter.notifyItemInserted(cards.size() - 1);
+            }
+        });
+
+        addCardFragment.show(getSupportFragmentManager(), "addCardFragment");
     }
+
 
     @Override
     public void onSelectionChanged(Set<String> selectedCardIds) {

@@ -6,7 +6,7 @@
         android:id="@+id/tv_no_cards"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nema kartica"
+        android:text="Nema sličica"
         android:visibility="gone"
         android:layout_centerInParent="true" />
 
@@ -44,6 +44,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="38dp"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="1dp" />
+        android:layout_marginBottom="1dp"
+        android:visibility="visible"/>
 
 </RelativeLayout>

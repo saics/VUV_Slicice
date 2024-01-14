@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/pagebkg"
     tools:context=".activities.AlbumDetailsActivity">
 
@@ -117,8 +118,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
+        android:color="@color/Orange"
         android:src="@drawable/baseline_add_circle_24"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        app:backgroundTint="@color/Orange"/>
     <!-- Delete Button -->
     <Button
         android:id="@+id/button_delete_cards"

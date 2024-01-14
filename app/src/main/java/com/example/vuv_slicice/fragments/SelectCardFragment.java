@@ -132,9 +132,11 @@ public class SelectCardFragment extends DialogFragment {
                 if (filteredCards.isEmpty()) {
                     noCardsTextView.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
+                    searchView.setVisibility(View.GONE);
                 } else {
                     noCardsTextView.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
+                    searchView.setVisibility(View.VISIBLE);
                     cardAdapter = new CardAdapter(getContext(), filteredCards, card -> addCardToAlbum(card));
                     recyclerView.setAdapter(cardAdapter);
                 }

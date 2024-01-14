@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:orientation="vertical"
+    android:gravity="center_vertical">
+
+    <!-- TextView for 'Bok (name)' -->
+    <TextView
+        android:id="@+id/textViewUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bok ime"
+        android:textColor="@color/Orange"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- TextView for the static text 'Prijavljeni ste kao' -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prijavljeni ste kao"
+        android:textColor="@color/Orange"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp" />
+
+    <!-- Dynamic TextView for user role (Korisnik/Admin) -->
+    <TextView
+        android:id="@+id/textViewUserRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/Orange"
+        android:textSize="16sp"
+        android:layout_marginTop="4dp" />
+</LinearLayout>

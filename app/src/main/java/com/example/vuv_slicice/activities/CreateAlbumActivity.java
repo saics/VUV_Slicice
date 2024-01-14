@@ -1,6 +1,7 @@
 package com.example.vuv_slicice.activities;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -62,6 +63,7 @@ public class CreateAlbumActivity extends AppCompatActivity {
     private Uri imageUri;
     private Uri photoURI;
     private boolean isNewImage = false;
+    private ProgressDialog progressDialog;
 
     private Button saveAlbumButton;
 
@@ -120,6 +122,25 @@ public class CreateAlbumActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void showProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Saving album..."); // Customize this message
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(true);
+        progressDialog.setOnCancelListener(dialog -> {
+            // Handle the cancellation logic here
+            Toast.makeText(CreateAlbumActivity.this, "Album saving cancelled", Toast.LENGTH_SHORT).show();
+            // Additional cancellation handling code (if necessary)
+        });
+        progressDialog.show();
+    }
+
+    private void dismissProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     private void loadAlbumData(String albumId) {
@@ -243,13 +264,8 @@ public class CreateAlbumActivity extends AppCompatActivity {
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("albums");
         Map<String, Object> albumDetails = new HashMap<>();
         albumDetails.put("name", albumName);
+        albumDetails.put("image", imageUrl);
 
-        // Only update the image URL if a new image has been uploaded
-        if (imageUrl != null) {
-            albumDetails.put("image", imageUrl);
-        }
-
-        // Use the existing albumId if updating, otherwise generate a new one
         if (albumId == null) {
             albumId = databaseRef.push().getKey();
         }
@@ -258,26 +274,28 @@ public class CreateAlbumActivity extends AppCompatActivity {
             databaseRef.child(albumId).updateChildren(albumDetails)
                     .addOnSuccessListener(aVoid -> {
                         Log.d("CreateAlbumActivity", "Album saved successfully");
+                        dismissProgressDialog(); // Dismiss dialog on success
                         finish();
                     })
-                    .addOnFailureListener(e -> Log.e("CreateAlbumActivity", "Failed to save album", e));
+                    .addOnFailureListener(e -> {
+                        Log.e("CreateAlbumActivity", "Failed to save album", e);
+                        dismissProgressDialog(); // Dismiss dialog on failure
+                    });
         } else {
             Log.e("CreateAlbumActivity", "Generated album ID is null");
         }
     }
 
-
     private void uploadImageToStorage(String albumId, String albumName) {
         if (imageUri != null) {
             StorageReference storageRef = FirebaseStorage.getInstance().getReference("albums/" + albumName);
             storageRef.putFile(imageUri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        storageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
-                            saveAlbumDetails(albumId, albumName, downloadUri.toString());
-                        });
-                    })
+                    .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                        saveAlbumDetails(albumId, albumName, downloadUri.toString());
+                    }))
                     .addOnFailureListener(e -> {
                         Log.e("CreateAlbumActivity", "Image upload failed", e);
+                        dismissProgressDialog();
                     });
         }
     }
@@ -288,10 +306,11 @@ public class CreateAlbumActivity extends AppCompatActivity {
         String albumId = getIntent().getStringExtra("albumId");
 
         if (!albumName.isEmpty() && imageUri != null) {
+            showProgressDialog(); // Show progress dialog here
             if ("edit".equals(mode) && albumId != null) {
                 updateAlbum(albumId, albumName);
             } else {
-                uploadImageToStorage(albumId, albumName); // Pass albumId
+                uploadImageToStorage(albumId, albumName);
             }
         } else {
             Log.e("CreateAlbumActivity", "Album name is empty or image URI is null");
@@ -299,9 +318,10 @@ public class CreateAlbumActivity extends AppCompatActivity {
         }
     }
     private void updateAlbum(String albumId, String albumName) {
+        showProgressDialog();
         DatabaseReference albumRef = FirebaseDatabase.getInstance().getReference("albums").child(albumId);
 
-        if (isNewImage) { // Assuming you have a flag 'isNewImage' to track if the image is new
+        if (isNewImage) {
             StorageReference storageRef = FirebaseStorage.getInstance().getReference("albums/" + albumName);
             storageRef.putFile(imageUri)
                     .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {

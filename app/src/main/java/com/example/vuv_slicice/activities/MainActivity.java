@@ -1,16 +1,23 @@
 package com.example.vuv_slicice.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.util.Log;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vuv_slicice.models.Album;
@@ -18,6 +25,7 @@ import com.example.vuv_slicice.adapters.AlbumAdapter;
 import com.example.vuv_slicice.utils.ItemOffsetDecoration;
 import com.example.vuv_slicice.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.vuv_slicice.models.User;
 public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAlbumDeleteListener, AlbumAdapter.OnAlbumEditListener {
     private RecyclerView recyclerView;
     private AlbumAdapter albumAdapter;
@@ -36,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
     private ValueEventListener albumsEventListener;
     private DatabaseReference albumsRef;
     private ProgressBar progressBar;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
     private boolean isAdmin = false;
 
 
@@ -47,6 +58,32 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
         recyclerView = findViewById(R.id.recycler_view);
         fabAddAlbum = findViewById(R.id.fab_add_album);
         progressBar = findViewById(R.id.progressBar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu); // Set your hamburger icon here
+
+        // Set up the navigation item listener
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.home) {
+                // Handle the home action
+            } else if (id == R.id.logoutFab) {
+                logoutUser();
+            }
+
+            // Close the drawer after an item is selected
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        });
 
         int offsetPx = getResources().getDimensionPixelSize(R.dimen.default_offset);
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(offsetPx);
@@ -69,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
         });
 
         checkIfUserIsAdmin();
+        updateNavigationHeader();
         fetchAlbumsData();
     }
 
@@ -167,6 +205,75 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
                     Log.w("MainActivity", "checkIfUserIsAdmin:onCancelled", databaseError.toException());
                 }
             });
+        }
+        updateNavigationHeader();
+    }
+
+    private void logoutUser() {
+        new AlertDialog.Builder(this)
+                .setTitle("Odjava")
+                .setMessage("Jesi li siguran da se želiš odjaviti?")
+                .setPositiveButton("Da", (dialog, which) -> {
+                    // Handle user confirmation to logout
+                    FirebaseAuth.getInstance().signOut();
+                    // Redirect to the login activity
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish(); // Ensures the user cannot go back to the MainActivity without logging in again
+                })
+                .setNegativeButton("Ne", (dialog, which) -> {
+                    // Handle user cancellation
+                    dialog.dismiss();
+                })
+                .show();
+    }
+
+
+    private void updateNavigationHeader() {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView userNameTextView = headerView.findViewById(R.id.textViewUserName);
+        TextView userRoleTextView = headerView.findViewById(R.id.textViewUserRole);
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(firebaseUser.getUid());
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user != null) {
+                        userNameTextView.setText("Bok " + user.getName());
+                        userRoleTextView.setText(user.getIsAdmin() ? "Admin" : "Korisnik");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.w("MainActivity", "Failed to read user data.", databaseError.toException());
+                }
+            });
+        } else {
+            // Handle the case when the user is not logged in
+            userNameTextView.setText("Bok Guest");
+            userRoleTextView.setText("Korisnik");
+        }
+    }
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 }

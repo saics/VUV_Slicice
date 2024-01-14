@@ -1,14 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AddCardFragment">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- Input for Card Name -->
+    <EditText
+        android:id="@+id/card_name_input"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:hint="Unesite ime sličice"
+        android:padding="10dp"
+        android:layout_marginBottom="20dp"/>
 
-</FrameLayout>
+    <!-- Image Preview -->
+    <ImageView
+        android:id="@+id/card_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_image"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Buttons for Photo Selection -->
+    <Button
+        android:id="@+id/button_take_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Uslikaj fotografiju"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:id="@+id/button_select_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Izaberi fotografiju iz galerije"
+        android:layout_marginTop="10dp"/>
+
+    <!-- Save Button -->
+    <Button
+        android:id="@+id/button_save_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Spremi sličicu"
+        android:layout_marginTop="20dp"/>
+</LinearLayout>

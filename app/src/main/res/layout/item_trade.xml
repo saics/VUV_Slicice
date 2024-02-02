@@ -28,8 +28,8 @@
 
         <ImageView
             android:id="@+id/img_requested_card"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/trade_card_image_width"
+            android:layout_height="@dimen/trade_card_image_height"
             android:src="@drawable/default_image" />
     </LinearLayout>
 
@@ -65,8 +65,8 @@
 
         <ImageView
             android:id="@+id/img_offered_card"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/trade_card_image_width"
+            android:layout_height="@dimen/trade_card_image_height"
             android:src="@drawable/default_image" />
     </LinearLayout>
 

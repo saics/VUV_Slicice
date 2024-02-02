@@ -97,6 +97,7 @@ public class TradeActivity extends AppCompatActivity {
         fetchTrades();
     }
 
+
     private void fetchTrades() {
         DatabaseReference tradesRef = FirebaseDatabase.getInstance().getReference("trades");
         DatabaseReference userCollectionRef = FirebaseDatabase.getInstance().getReference("users")
@@ -112,13 +113,18 @@ public class TradeActivity extends AppCompatActivity {
                         List<Trade> validTrades = new ArrayList<>();
                         for (DataSnapshot tradeSnapshot : tradesSnapshot.getChildren()) {
                             Trade trade = tradeSnapshot.getValue(Trade.class);
-                            if (trade != null && !trade.isAccepted() && !trade.getOfferingUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-
-                                if (hasCardToTrade(userCollectionSnapshot, trade.getRequestedCardId())) {
+                            if (trade != null && !trade.isAccepted()) {
+                                if (hasCardToTrade(userCollectionSnapshot, trade.getRequestedCardId()) || trade.getOfferingUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                     validTrades.add(trade);
                                 }
                             }
                         }
+                        // Sortiranje prvo moje, pa tuđe
+                        validTrades.sort((trade1, trade2) -> {
+                            boolean isUserTrade1 = trade1.getOfferingUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            boolean isUserTrade2 = trade2.getOfferingUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            return Boolean.compare(isUserTrade2, isUserTrade1);
+                        });
                         updateRecyclerView(validTrades);
                     }
 

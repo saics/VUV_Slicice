@@ -12,7 +12,6 @@ public class Trade {
     public Trade() {
     }
 
-    // Constructor with parameters
     public Trade(String tradeId, String offeredCardId, String requestedCardId, String offeringUserId, String acceptingUserId, boolean isAccepted) {
         this.tradeId = tradeId;
         this.offeredCardId = offeredCardId;
@@ -22,7 +21,6 @@ public class Trade {
         this.isAccepted = isAccepted;
     }
 
-    // Getters and Setters
     public String getTradeId() {
         return tradeId;
     }

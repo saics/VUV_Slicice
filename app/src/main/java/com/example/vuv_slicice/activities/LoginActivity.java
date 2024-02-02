@@ -44,12 +44,10 @@ public class LoginActivity extends AppCompatActivity {
         if (!validateInputs(username, password)) return;
 
         loginButton.setEnabled(false);
-        // TODO: Show loading indicator
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, task -> {
                     loginButton.setEnabled(true);
-                    // TODO: Hide loading indicator
 
                     if (task.isSuccessful()) {
                         navigateToMainActivity();

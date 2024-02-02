@@ -90,7 +90,6 @@ public class CreateAlbumActivity extends AppCompatActivity {
         String mode = getIntent().getStringExtra("mode");
         if ("edit".equals(mode)) {
             String albumId = getIntent().getStringExtra("albumId");
-            // Load the album data for editing
             loadAlbumData(albumId);
         }
         albumNameInput.addTextChangedListener(new TextWatcher() {
@@ -126,13 +125,11 @@ public class CreateAlbumActivity extends AppCompatActivity {
 
     private void showProgressDialog() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Spremanje albuma..."); // Customize this message
+        progressDialog.setMessage("Spremanje albuma...");
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(true);
         progressDialog.setOnCancelListener(dialog -> {
-            // Handle the cancellation logic here
             Toast.makeText(CreateAlbumActivity.this, "Spremanje albuma prekinuto", Toast.LENGTH_SHORT).show();
-            // Additional cancellation handling code (if necessary)
         });
         progressDialog.show();
     }
@@ -160,7 +157,6 @@ public class CreateAlbumActivity extends AppCompatActivity {
 
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("CreateAlbumActivity", "Error loading album", databaseError.toException());
-                // Handle the error
             }
         });
     }
@@ -241,10 +237,10 @@ public class CreateAlbumActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
                 imageUri = data.getData();
-                isNewImage = true;  // New image selected
+                isNewImage = true;
             } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 imageUri = photoURI;
-                isNewImage = true;  // New image captured
+                isNewImage = true;
             }
             loadImage(imageUri);
             checkInputsAndEnableSaveButton();
@@ -274,12 +270,12 @@ public class CreateAlbumActivity extends AppCompatActivity {
             databaseRef.child(albumId).updateChildren(albumDetails)
                     .addOnSuccessListener(aVoid -> {
                         Log.d("CreateAlbumActivity", "Album saved successfully");
-                        dismissProgressDialog(); // Dismiss dialog on success
+                        dismissProgressDialog();
                         finish();
                     })
                     .addOnFailureListener(e -> {
                         Log.e("CreateAlbumActivity", "Failed to save album", e);
-                        dismissProgressDialog(); // Dismiss dialog on failure
+                        dismissProgressDialog();
                     });
         } else {
             Log.e("CreateAlbumActivity", "Generated album ID is null");
@@ -306,7 +302,7 @@ public class CreateAlbumActivity extends AppCompatActivity {
         String albumId = getIntent().getStringExtra("albumId");
 
         if (!albumName.isEmpty() && imageUri != null) {
-            showProgressDialog(); // Show progress dialog here
+            showProgressDialog();
             if ("edit".equals(mode) && albumId != null) {
                 updateAlbum(albumId, albumName);
             } else {
@@ -329,7 +325,6 @@ public class CreateAlbumActivity extends AppCompatActivity {
                     }))
                     .addOnFailureListener(e -> Log.e("CreateAlbumActivity", "Image upload failed", e));
         } else {
-            // If the image has not been changed, update the album data directly
             saveAlbumDetails(albumId, albumName, imageUri.toString());
         }
     }

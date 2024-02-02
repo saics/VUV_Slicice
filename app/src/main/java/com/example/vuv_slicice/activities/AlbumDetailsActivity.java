@@ -90,13 +90,11 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
 
         albumId = getIntent().getStringExtra("albumId");
         if (albumId == null) {
-            //TODO: Handle missing album ID
             return;
         }
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            //TODO: Handle user not logged in
             return;
         }
         userId = user.getUid();
@@ -241,7 +239,7 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
         builder.setItems(options, (dialog, which) -> {
             if (which == 0) {
                 SelectCardFragment selectCardFragment = SelectCardFragment.newInstance(albumId);
-                selectCardFragment.setOnCardAddedListener(this); // Set the listener
+                selectCardFragment.setOnCardAddedListener(this);
                 selectCardFragment.show(getSupportFragmentManager(), "selectCardFragment");
             } else {
                 openCreateCardDialog();
@@ -316,7 +314,6 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
                 }
             });
 
-            // Remove the card from the user's collection
             userCardRef.removeValue().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Log.d("Delete Card", "Card removed from user's collection successfully: " + cardId);
@@ -344,7 +341,6 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Handle image selection or capture
         if (resultCode == RESULT_OK) {
             if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
                 selectedImageUri = data.getData();
@@ -465,7 +461,7 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 totalCardsInAlbum = (int) dataSnapshot.getChildrenCount();
-                updateStatsUI();  // Update the statistics display
+                updateStatsUI();
             }
 
             @Override
@@ -489,7 +485,6 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
         cardRef.removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(AlbumDetailsActivity.this, "Sličica uspješno izbrisana.", Toast.LENGTH_SHORT).show();
-                // Update UI or refresh data if needed
             } else {
                 Toast.makeText(AlbumDetailsActivity.this, "Greška brisanja sličice.", Toast.LENGTH_SHORT).show();
             }
@@ -507,7 +502,6 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
                     isAdmin = adminFlag != null && adminFlag;
                     updateFabVisibility();
 
-                    // Update the adapter with the correct admin status
                     cardAdapter.setAdmin(isAdmin);
                     cardAdapter.notifyDataSetChanged();
                 }

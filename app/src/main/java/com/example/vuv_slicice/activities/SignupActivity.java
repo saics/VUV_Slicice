@@ -51,12 +51,10 @@ public class SignupActivity extends AppCompatActivity {
         if (!validateInputs(name, email, username, password)) return;
 
         signupButton.setEnabled(false);
-        // TODO: Show loading indicator
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     signupButton.setEnabled(true);
-                    // TODO: Hide loading indicator
 
                     if (task.isSuccessful()) {
                         saveUserData(name, email, username);

@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
 
-        // Set up the navigation item listener
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 
@@ -88,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
                 logoutUser();
             }
 
-            // Close the drawer after an item is selected
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
@@ -222,15 +220,12 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
                 .setTitle("Odjava")
                 .setMessage("Jesi li siguran da se želiš odjaviti?")
                 .setPositiveButton("Da", (dialog, which) -> {
-                    // Handle user confirmation to logout
                     FirebaseAuth.getInstance().signOut();
-                    // Redirect to the login activity
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
-                    finish(); // Ensures the user cannot go back to the MainActivity without logging in again
+                    finish();
                 })
                 .setNegativeButton("Ne", (dialog, which) -> {
-                    // Handle user cancellation
                     dialog.dismiss();
                 })
                 .show();
@@ -262,7 +257,6 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
                 }
             });
         } else {
-            // Handle the case when the user is not logged in
             userNameTextView.setText("Bok Guest");
             userRoleTextView.setText("Korisnik");
         }

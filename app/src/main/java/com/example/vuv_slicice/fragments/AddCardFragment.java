@@ -57,7 +57,6 @@ public class AddCardFragment extends DialogFragment {
     private OnCardCreatedListener listener;
     private ProgressDialog progressDialog;
 
-    // Required empty public constructor
     public AddCardFragment() {}
 
     public static AddCardFragment newInstance(String albumId) {
@@ -98,13 +97,11 @@ public class AddCardFragment extends DialogFragment {
 
     private void showProgressDialog() {
         progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Saving..."); // Customize this message as needed
+        progressDialog.setMessage("Spremanje...");
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(true);
         progressDialog.setOnCancelListener(dialog -> {
-            // Handle the cancellation logic here
             Toast.makeText(getContext(), "Card saving cancelled", Toast.LENGTH_SHORT).show();
-            // Perform any additional cleanup if necessary
         });
         progressDialog.show();
     }
@@ -119,10 +116,8 @@ public class AddCardFragment extends DialogFragment {
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
 
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create the File where the photo should go
             File photoFile;
             try {
                 photoFile = createImageFile();
@@ -138,7 +133,6 @@ public class AddCardFragment extends DialogFragment {
     }
 
     private File createImageFile() throws IOException {
-        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -148,7 +142,6 @@ public class AddCardFragment extends DialogFragment {
                 storageDir
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
         imageUri = Uri.fromFile(image);
         return image;
     }
@@ -168,7 +161,6 @@ public class AddCardFragment extends DialogFragment {
                 imageUri = data.getData();
                 cardImageView.setImageURI(imageUri);
             } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                // Set the captured image to cardImageView
                 cardImageView.setImageURI(photoURI);
             }
         }
@@ -217,7 +209,7 @@ public class AddCardFragment extends DialogFragment {
 
                 notifyCardCreated(newCard);
                 addCardToAlbum(cardId);
-                getActivity().setResult(Activity.RESULT_OK); // Set result for the calling activity
+                getActivity().setResult(Activity.RESULT_OK);
                 dismiss();
             } else {
                 Toast.makeText(getContext(), "Failed to save card", Toast.LENGTH_SHORT).show();

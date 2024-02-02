@@ -85,10 +85,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         if (onCardSelectedListener != null) {
-            // Use the layout for the select card screen
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_select, parent, false);
         } else {
-            // Use the original layout
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card, parent, false);
         }
         return new CardViewHolder(view);
@@ -117,7 +115,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                 })
                 .into(holder.cardImageView);
 
-        // This listener is relevant only if card interaction is allowed (e.g., in AlbumDetailsActivity)
         if (cardInteractionListener != null) {
             holder.cardImageView.setOnClickListener(v -> {
                 cardInteractionListener.onEditCard(card.getId());
@@ -125,14 +122,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         }
 
         if (showTradeQuantity && holder.tradeQuantityTextView != null) {
-            int displayQuantity = card.getQuantity(); // Assuming you want to show tradable quantity
+            int displayQuantity = card.getQuantity();
             holder.tradeQuantityTextView.setText("Duplikati: " + displayQuantity);
             holder.tradeQuantityTextView.setVisibility(View.VISIBLE);
         } else if (holder.tradeQuantityTextView != null) {
             holder.tradeQuantityTextView.setVisibility(View.GONE);
         }
 
-        // These elements are relevant only if they exist in the layout (e.g., in AlbumDetailsActivity)
         if (holder.quantityTextView != null) {
             holder.quantityTextView.setText(String.valueOf(card.getQuantity()));
 
@@ -159,20 +155,17 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             }
         }
 
-        // This listener is for selecting a card (e.g., in SelectCardFragment)
         if (onCardSelectedListener != null) {
             holder.itemView.setOnClickListener(v -> {
                 onCardSelectedListener.onCardSelected(cards.get(holder.getAdapterPosition()));
             });
         }
-        // Set the background color if the card is selected
         if (card.isSelected()) {
             holder.itemView.setBackgroundColor(Color.BLUE);
         } else {
             holder.itemView.setBackgroundColor(Color.TRANSPARENT);
         }
 
-        // Admin-specific functionality: Allow long press to select/deselect cards
         if (isAdmin) {
             holder.itemView.setOnLongClickListener(v -> {
                 boolean isSelected = !card.isSelected();

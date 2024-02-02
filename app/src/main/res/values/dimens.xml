@@ -7,4 +7,7 @@
     <dimen name="dialog_width">650dp</dimen>
     <dimen name="dialog_height">650dp</dimen>
     <dimen name="dialog_custom_height">750dp</dimen>
+    <dimen name="trade_card_image_width">100dp</dimen>
+    <dimen name="trade_card_image_height">100dp</dimen>
+
 </resources>

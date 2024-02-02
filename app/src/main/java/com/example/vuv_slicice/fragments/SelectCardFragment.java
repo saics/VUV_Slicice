@@ -70,7 +70,6 @@ public class SelectCardFragment extends DialogFragment {
         searchView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start,int count, int after) {
-                // Not used, but must be implemented
             }@Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (cardAdapter != null) {
@@ -80,7 +79,6 @@ public class SelectCardFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // Not used, but must be implemented
             }
         });
 
@@ -110,7 +108,6 @@ public class SelectCardFragment extends DialogFragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //TODO: Handle errors here
             }
         });
     }
@@ -143,7 +140,6 @@ public class SelectCardFragment extends DialogFragment {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Handle errors here
             }
         });
     }

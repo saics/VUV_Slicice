@@ -43,7 +43,12 @@ public class TradeAdapter extends RecyclerView.Adapter<TradeAdapter.TradeViewHol
     @NonNull
     @Override
     public TradeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_trade, parent, false);
+        View view;
+        if (viewType == 1) { // Moj trade
+            view = LayoutInflater.from(context).inflate(R.layout.trade_item, parent, false);
+        } else { // Trade od drugog korisnika
+            view = LayoutInflater.from(context).inflate(R.layout.item_trade, parent, false);
+        }
         return new TradeViewHolder(view);
     }
 
@@ -53,9 +58,11 @@ public class TradeAdapter extends RecyclerView.Adapter<TradeAdapter.TradeViewHol
         fetchCardDetails(trade.getOfferedCardId(), holder.tvOfferedCardName, holder.imgOfferedCard);
         fetchCardDetails(trade.getRequestedCardId(), holder.tvRequestedCardName, holder.imgRequestedCard);
 
-        holder.btnAcceptTrade.setOnClickListener(view -> {
-            acceptTrade(trade);
-        });
+        if (holder.btnAcceptTrade != null) {
+            holder.btnAcceptTrade.setOnClickListener(view -> {
+                acceptTrade(trade);
+            });
+        }
     }
     private void acceptTrade(Trade trade) {
         new AlertDialog.Builder(context)
@@ -170,6 +177,16 @@ public class TradeAdapter extends RecyclerView.Adapter<TradeAdapter.TradeViewHol
     }
 
     @Override
+    public int getItemViewType(int position) {
+        Trade trade = trades.get(position);
+        if (trade.getOfferingUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
     public int getItemCount() {
         return trades.size();
     }
@@ -189,5 +206,3 @@ public class TradeAdapter extends RecyclerView.Adapter<TradeAdapter.TradeViewHol
         }
     }
 }
-
-

@@ -146,7 +146,7 @@ public class TradeSelectionFragment extends DialogFragment {
             return;
         }
 
-        String requestedCardId = selectedReceiveCard.getId(); // Get the ID of the requested card
+        String requestedCardId = selectedReceiveCard.getId();
         String offeredCardId = selectedTradeCard.getId();
         String offeringUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -160,9 +160,9 @@ public class TradeSelectionFragment extends DialogFragment {
         Trade newTrade = new Trade(tradeId, offeredCardId, requestedCardId, offeringUserId, null, false);
         tradesRef.child(tradeId).setValue(newTrade)
                 .addOnSuccessListener(aVoid -> {
-                    updateCardQuantityInUserCollection(offeredCardId, -1); // Decrease quantity by 1
+                    updateCardQuantityInUserCollection(offeredCardId, -1);
                     Toast.makeText(getContext(), "Ponuda uspješno kreirana", Toast.LENGTH_SHORT).show();
-                    dismiss(); // Close the dialog
+                    dismiss();
                 })
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Greška prilikom kreiranja ponude", Toast.LENGTH_SHORT).show());
     }
@@ -224,7 +224,6 @@ public class TradeSelectionFragment extends DialogFragment {
                     if (album != null) {
                         album.setId(albumSnapshot.getKey());
 
-                        // Assuming cardIds are the children under each album
                         List<String> cardIds = new ArrayList<>();
                         for (DataSnapshot cardSnapshot : albumSnapshot.child("cards").getChildren()) {
                             cardIds.add(cardSnapshot.getKey());
@@ -239,7 +238,6 @@ public class TradeSelectionFragment extends DialogFragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors here
                 Log.e("fetchAlbumData", "Error fetching album data: ", databaseError.toException());
             }
         });
@@ -304,24 +302,21 @@ public class TradeSelectionFragment extends DialogFragment {
                                 Card card = cardDetailSnapshot.getValue(Card.class);
                                 if (card != null) {
                                     card.setId(cardDetailSnapshot.getKey());
-                                    card.setQuantity(quantity - 1); // Tradable quantity
+                                    card.setQuantity(quantity - 1);
                                     tradableCards.add(card);
                                 }
 
                                 if (pendingQueries.decrementAndGet() == 0) {
-                                    // All card details fetched, update RecyclerView
                                     updateTradeCardsRecyclerView(tradableCards);
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                                // Handle possible errors
                             }
                         });
                     } else {
                         if (pendingQueries.decrementAndGet() == 0) {
-                            // All card details fetched, update RecyclerView
                             updateTradeCardsRecyclerView(tradableCards);
                         }
                     }
@@ -330,18 +325,15 @@ public class TradeSelectionFragment extends DialogFragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle possible errors
             }
         });
     }
 
     private void updateTradeCardsRecyclerView(List<Card> tradableCards) {
         if (tradeCardAdapter == null) {
-            // Initialize the adapter with the flag set to true for showing trade quantities
             tradeCardAdapter = new CardAdapter(getContext(), tradableCards, this::onCardSelectedForTrade, true);
             rvTradeCards.setAdapter(tradeCardAdapter);
         } else {
-            // If the adapter already exists, just update the dataset
             tradeCardAdapter.updateDataset(tradableCards);
         }
     }
@@ -386,7 +378,6 @@ public class TradeSelectionFragment extends DialogFragment {
 
                                             @Override
                                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                // Handle possible errors
                                             }
                                         });
                             } else {
@@ -398,7 +389,6 @@ public class TradeSelectionFragment extends DialogFragment {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Handle possible errors
                         }
                     });
                 }
@@ -406,7 +396,6 @@ public class TradeSelectionFragment extends DialogFragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle possible errors
             }
         });
     }
@@ -426,8 +415,6 @@ public class TradeSelectionFragment extends DialogFragment {
 
 
     private void setupSearchListeners() {
-        // Add text change listeners to the search EditTexts
-        // Filter the respective RecyclerView's adapter based on the search query
     }
 
     private void onCardSelectedForTrade(Card selectedCard) {
@@ -441,7 +428,6 @@ public class TradeSelectionFragment extends DialogFragment {
         Glide.with(getContext()).load(selectedTradeCard.getImage()).into(my_card_image);
         my_card_name.setText(selectedTradeCard.getName());
 
-        // Refresh the second RecyclerView
         String selectedAlbumId = getSelectedAlbumId();
         if (selectedAlbumId != null) {
             loadCardsToReceive(selectedAlbumId);
@@ -449,28 +435,9 @@ public class TradeSelectionFragment extends DialogFragment {
     }
 
     private void onCardSelectedToReceive(Card selectedCard) {
-        selectedReceiveCard = selectedCard; // Store the selected card
+        selectedReceiveCard = selectedCard;
         their_card_name.setText(selectedCard.getName());
         Log.d("CardSelection", "Card selected to receive: " + selectedCard.getName() + " (ID: " + selectedCard.getId() + ")");
         Glide.with(getContext()).load(selectedCard.getImage()).into(their_card_image);
-    }
-
-    private void setupCheckboxListener() {
-        // Add a listener to the checkbox
-        // Update the lower RecyclerView based on the checkbox state
-    }
-
-    private void executeTrade() {
-        // Validate the trade (e.g., ensure the user has enough copies to trade)
-        // Update Firebase with the new card quantities and ownerships
-        // Provide feedback to the user (e.g., a Toast message)
-    }
-
-    private void updateUI() {
-        // Update UI elements like RecyclerViews and TextViews as needed
-    }
-
-    private void handleError(Exception e) {
-        // Handle any errors that occur (e.g., Firebase operation failures)
     }
 }

@@ -16,18 +16,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Daješ" />
+            android:textColor="@color/Black"
+            android:text="Nudiš" />
 
         <TextView
             android:id="@+id/tv_requested_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Black"
             android:text="Requested Card" />
 
         <ImageView
-            android:id="@+id/img_requested_card"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/img_offered_card"
+            android:layout_width="@dimen/trade_card_image_width"
+            android:layout_height="@dimen/trade_card_image_height"
             android:src="@drawable/default_image" />
     </LinearLayout>
 
@@ -35,7 +37,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="←"
+        android:textColor="@color/Black"
+        android:text="→"
         android:textSize="24sp"
         android:layout_gravity="center" />
 
@@ -50,26 +53,30 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dobivaš" />
+            android:textColor="@color/Black"
+            android:text="Želiš" />
 
         <TextView
             android:id="@+id/tv_offered_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/Black"
             android:text="Offered Card" />
 
         <ImageView
-            android:id="@+id/img_offered_card"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:id="@+id/img_requested_card"
+            android:layout_width="@dimen/trade_card_image_width"
+            android:layout_height="@dimen/trade_card_image_height"
             android:src="@drawable/default_image" />
     </LinearLayout>
-
-    <!-- Accept Trade Button -->
-    <Button
-        android:id="@+id/btn_accept_trade"
+    <Space
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Prihvati"
-        android:layout_gravity="center_vertical" />
+        android:layout_margin="24dp" />
+
+    <ImageView
+        android:id="@+id/img_trash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/delete_icon" />
 </LinearLayout>

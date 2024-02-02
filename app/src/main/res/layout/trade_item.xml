@@ -20,11 +20,11 @@
             android:text="Nudiš" />
 
         <TextView
-            android:id="@+id/tv_requested_card_name"
+            android:id="@+id/tv_offered_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/Black"
-            android:text="Requested Card" />
+            android:text="Offered Card" />
 
         <ImageView
             android:id="@+id/img_offered_card"
@@ -57,11 +57,11 @@
             android:text="Želiš" />
 
         <TextView
-            android:id="@+id/tv_offered_card_name"
+            android:id="@+id/tv_requested_card_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/Black"
-            android:text="Offered Card" />
+            android:text="Requested Card" />
 
         <ImageView
             android:id="@+id/img_requested_card"

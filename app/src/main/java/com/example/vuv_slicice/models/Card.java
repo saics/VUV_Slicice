@@ -18,6 +18,13 @@ public class Card {
         this.quantity = 0;
     }
 
+    public Card(String cardId, String name, String image, int quantity) {
+        this.id = cardId;
+        this.name = name;
+        this.image = image;
+        this.quantity = quantity;
+    }
+
     public String getId() {
         return id;
     }

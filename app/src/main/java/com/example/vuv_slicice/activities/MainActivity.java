@@ -68,15 +68,23 @@ public class MainActivity extends AppCompatActivity implements AlbumAdapter.OnAl
         toggle.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu); // Set your hamburger icon here
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
 
         // Set up the navigation item listener
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 
             if (id == R.id.home) {
-                // Handle the home action
-            } else if (id == R.id.logoutFab) {
+                Toast.makeText(MainActivity.this, "Već si na home stranici!", Toast.LENGTH_SHORT).show();
+            }
+            else if (id == R.id.trade) {
+                Intent intent = new Intent(MainActivity.this, TradeActivity.class);
+                startActivity(intent);
+            }
+            else if (id == R.id.settings) {
+
+            }
+            else if (id == R.id.logoutFab) {
                 logoutUser();
             }
 

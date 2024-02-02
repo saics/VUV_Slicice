@@ -21,4 +21,12 @@
         android:text="Ime sličice"
         android:textSize="16sp" />
 
+    <!-- TextView for displaying the quantity of the card -->
+    <TextView
+        android:id="@+id/tv_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Quantity"
+        android:textSize="16sp" />
 </LinearLayout>

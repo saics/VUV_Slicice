@@ -20,6 +20,10 @@ public class Album {
     }
 
 
+    @Override
+    public String toString() {
+        return getName(); // this will be used by the ArrayAdapter for the spinner
+    }
     public List<String> getCardIds() {
         return cardIds;
     }

@@ -137,17 +137,16 @@ public class SelectCardFragment extends DialogFragment {
                     noCardsTextView.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
                     searchView.setVisibility(View.VISIBLE);
-                    cardAdapter = new CardAdapter(getContext(), filteredCards, card -> addCardToAlbum(card));
+                    cardAdapter = new CardAdapter(getContext(), filteredCards, card -> addCardToAlbum(card), false);
                     recyclerView.setAdapter(cardAdapter);
                 }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //TODO: Handle errors here
+                // Handle errors here
             }
         });
     }
-
 
     private void addCardToAlbum(Card card) {
         DatabaseReference albumCardsRef = FirebaseDatabase.getInstance().getReference("albums")

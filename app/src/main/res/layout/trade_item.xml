@@ -1,0 +1,75 @@
+<!-- trade_item.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- Requested Card Section (for the accepting user, this is what they will give) -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daješ" />
+
+        <TextView
+            android:id="@+id/tv_requested_card_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Requested Card" />
+
+        <ImageView
+            android:id="@+id/img_requested_card"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/default_image" />
+    </LinearLayout>
+
+    <!-- Arrow indicating trade direction -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="←"
+        android:textSize="24sp"
+        android:layout_gravity="center" />
+
+    <!-- Offered Card Section (for the accepting user, this is what they will receive) -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dobivaš" />
+
+        <TextView
+            android:id="@+id/tv_offered_card_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Offered Card" />
+
+        <ImageView
+            android:id="@+id/img_offered_card"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/default_image" />
+    </LinearLayout>
+
+    <!-- Accept Trade Button -->
+    <Button
+        android:id="@+id/btn_accept_trade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prihvati"
+        android:layout_gravity="center_vertical" />
+</LinearLayout>

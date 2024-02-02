@@ -4,4 +4,7 @@
     <dimen name="nav_header_height">100dp</dimen>
     <dimen name="activity_horizontal_margin">32dp</dimen>
     <dimen name="activity_vertical_margin">32dp</dimen>
+    <dimen name="dialog_width">650dp</dimen>
+    <dimen name="dialog_height">650dp</dimen>
+    <dimen name="dialog_custom_height">750dp</dimen>
 </resources>

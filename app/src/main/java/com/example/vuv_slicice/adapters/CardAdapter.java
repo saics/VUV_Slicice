@@ -2,6 +2,7 @@ package com.example.vuv_slicice.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +12,14 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.vuv_slicice.models.Card;
 import com.example.vuv_slicice.R;
 import com.google.firebase.database.DatabaseReference;
@@ -43,12 +49,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     }
 
 
-    private List<Card> cards;
-    private List<Card> cardsFull;
+    private List<Card> cards, cardsFull;
     private Context context;
-    private boolean isAdmin;
-    private String userId;
-    private String albumId;
+    private boolean isAdmin, showTradeQuantity;
+    private String userId, albumId;
+
     private CardUpdateListener cardUpdateListener;
     private CardInteractionListener cardInteractionListener;
     private Set<String> selectedCardIds = new HashSet<>();
@@ -66,12 +71,14 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         this.selectedCardIds = selectedCardIds;
         this.isAdmin = isAdmin;
     }
-    public CardAdapter(Context context, List<Card> cards, OnCardSelectedListener listener) {
+    public CardAdapter(Context context, List<Card> cards, OnCardSelectedListener listener, boolean showTradeQuantity) {
         this.context = context;
         this.cards = new ArrayList<>(cards);
-        this.cardsFull = new ArrayList<>(cards); // Make sure to initialize cardsFull
+        this.cardsFull = new ArrayList<>(cards);
         this.onCardSelectedListener = listener;
+        this.showTradeQuantity = showTradeQuantity;
     }
+
 
     @NonNull
     @Override
@@ -96,7 +103,18 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         Glide.with(context)
                 .load(card.getImage())
                 .error(R.drawable.default_image)
-                .placeholder(R.drawable.default_image)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        Log.e("GlideError", "Image Load Failed for card: " + card.getName() + ", Error: " + e.getMessage());
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        return false;
+                    }
+                })
                 .into(holder.cardImageView);
 
         // This listener is relevant only if card interaction is allowed (e.g., in AlbumDetailsActivity)
@@ -104,6 +122,14 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             holder.cardImageView.setOnClickListener(v -> {
                 cardInteractionListener.onEditCard(card.getId());
             });
+        }
+
+        if (showTradeQuantity && holder.tradeQuantityTextView != null) {
+            int displayQuantity = card.getQuantity(); // Assuming you want to show tradable quantity
+            holder.tradeQuantityTextView.setText("Duplikati: " + displayQuantity);
+            holder.tradeQuantityTextView.setVisibility(View.VISIBLE);
+        } else if (holder.tradeQuantityTextView != null) {
+            holder.tradeQuantityTextView.setVisibility(View.GONE);
         }
 
         // These elements are relevant only if they exist in the layout (e.g., in AlbumDetailsActivity)
@@ -136,8 +162,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         // This listener is for selecting a card (e.g., in SelectCardFragment)
         if (onCardSelectedListener != null) {
             holder.itemView.setOnClickListener(v -> {
-                onCardSelectedListener.onCardSelected
-                        (card);
+                onCardSelectedListener.onCardSelected(cards.get(holder.getAdapterPosition()));
             });
         }
         // Set the background color if the card is selected
@@ -254,9 +279,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     }
 
     public static class CardViewHolder extends RecyclerView.ViewHolder {
-        TextView cardNameTextView;
+        TextView cardNameTextView, quantityTextView, tradeQuantityTextView;
         ImageView cardImageView;
-        TextView quantityTextView;
         Button decreaseButton;
         Button increaseButton;
 
@@ -267,6 +291,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             quantityTextView = itemView.findViewById(R.id.card_quantity);
             decreaseButton = itemView.findViewById(R.id.decrease_button);
             increaseButton = itemView.findViewById(R.id.increase_button);
+            tradeQuantityTextView = itemView.findViewById(R.id.tv_quantity);
         }
     }
 

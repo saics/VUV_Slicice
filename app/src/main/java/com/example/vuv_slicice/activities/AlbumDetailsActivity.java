@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,9 +16,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,10 +65,12 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
     private HashSet<String> uniqueUserCards = new HashSet<>();
     private boolean isAdmin = false;
     private Uri selectedImageUri;
+    private View marker25, marker50, marker75;
     private FloatingActionButton fabAddCard;
     private Button deleteButton;
     private Set<String> selectedCardIds = new HashSet<>();
     private List<Integer> selectedCardPositions = new ArrayList<>();
+    private ProgressBar albumProgressBar;
 
 
 
@@ -74,6 +80,8 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
         setContentView(R.layout.activity_album_details);
         deleteButton = findViewById(R.id.button_delete_cards);
         deleteButton.setOnClickListener(v -> onDeleteSelectedCards());
+        albumProgressBar = findViewById(R.id.album_progress_bar);
+
 
         FloatingActionButton fabAddCard = findViewById(R.id.fab_add_card);
         fabAddCard.setOnClickListener(v -> showAddCardOptions());
@@ -102,6 +110,9 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
     }
 
     private void initializeUI() {
+        marker25 = findViewById(R.id.marker_25);
+        marker50 = findViewById(R.id.marker_50);
+        marker75 = findViewById(R.id.marker_75);
         ImageView albumImageView = findViewById(R.id.album_image);
         TextView albumNameTextView = findViewById(R.id.album_name);
         deleteButton.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
@@ -121,19 +132,18 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 totalCardsInAlbum = (int) dataSnapshot.getChildrenCount();
-                cards.clear(); // Clear the existing cards list
+                cards.clear();
 
                 for (DataSnapshot cardSnapshot : dataSnapshot.getChildren()) {
                     loadCardDetails(cardSnapshot.getKey());
                 }
 
-                cardAdapter.notifyDataSetChanged(); // Notify the adapter of the data change
+                cardAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.w("Firebase", "loadAlbumCards:onCancelled", databaseError.toException());
-                // Handle errors here
             }
         });
     }
@@ -230,12 +240,10 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
         builder.setTitle("Dodaj sličicu");
         builder.setItems(options, (dialog, which) -> {
             if (which == 0) {
-                // Add existing card
                 SelectCardFragment selectCardFragment = SelectCardFragment.newInstance(albumId);
                 selectCardFragment.setOnCardAddedListener(this); // Set the listener
                 selectCardFragment.show(getSupportFragmentManager(), "selectCardFragment");
             } else {
-                // Create new card
                 openCreateCardDialog();
             }
         });
@@ -245,14 +253,17 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
     private void openCreateCardDialog() {
         AddCardFragment addCardFragment = new AddCardFragment();
         Bundle args = new Bundle();
-        args.putString("albumId", albumId); // Pass the albumId to the fragment
+        args.putString("albumId", albumId);
         addCardFragment.setArguments(args);
 
-        // Set a listener to refresh the album cards list after adding a new card
         addCardFragment.setOnCardCreatedListener(newCard -> {
             if (newCard != null) {
                 cards.add(newCard);
                 cardAdapter.notifyItemInserted(cards.size() - 1);
+                Log.d("AlbumDetailsActivity", "New card added: " + newCard.getName());
+                totalCardsInAlbum++;
+                updateStatsUI();
+                Log.d("AlbumDetailsActivity", totalCardsInAlbum + " / " + userCardsInAlbum + " / " + duplicateCards);
             }
         });
 
@@ -262,18 +273,15 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
 
     @Override
     public void onSelectionChanged(Set<String> selectedCardIds) {
-        // You can use this method to show/hide the delete button based on whether cards are selected
         toggleDeleteButtonVisibility(!selectedCardIds.isEmpty());
     }
 
     @Override
     public void onCardAdded() {
-        // Code to refresh the list of cards
         loadAlbumCards();
     }
 
     private void showDeleteConfirmationDialog() {
-        // Build a list or a string of all selected card names
         String selectedCardsNames = getSelectedCardsNames();
 
         new AlertDialog.Builder(this)
@@ -285,9 +293,8 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
     }
 
     private String getSelectedCardsNames() {
-        // Concatenate names of all selected cards
         StringBuilder names = new StringBuilder();
-        for (int i : selectedCardPositions) { // Assuming selectedCardPositions holds the positions of selected cards
+        for (int i : selectedCardPositions) {
             names.append(cards.get(i).getName()).append("\n");
         }
         return names.toString();
@@ -295,15 +302,12 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
 
     private void deleteSelectedCards() {
         for (String cardId : selectedCardIds) {
-            // Reference to the card in the album
             DatabaseReference albumCardRef = FirebaseDatabase.getInstance().getReference("albums")
                     .child(albumId).child("cards").child(cardId);
 
-            // Reference to the card in the user's collection
             DatabaseReference userCardRef = FirebaseDatabase.getInstance().getReference("users")
                     .child(userId).child("collection").child(albumId).child(cardId);
 
-            // Remove the card from the album
             albumCardRef.removeValue().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Log.d("Delete Card", "Card removed from album successfully: " + cardId);
@@ -323,25 +327,24 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
             cards.removeIf(card -> card.getId().equals(cardId));
         }
 
-        updateUIPostDeletion();  // Update the UI after deletion
+        updateUIPostDeletion();
     }
 
     private void updateUIPostDeletion() {
-        refreshAlbumData();      // Refresh album data from Firebase
+        refreshAlbumData();
         selectedCardIds.clear();
         selectedCardPositions.clear();
-        cardAdapter.clearSelection(); // Make sure this method exists in your adapter
-        cardAdapter.notifyDataSetChanged(); // Refresh RecyclerView
-        toggleDeleteButtonVisibility(false); // Hide delete button
-        updateCardQuantities(); // Update the quantities after deletion
-        updateStatsUI(); // Update the stats UI
+        cardAdapter.clearSelection();
+        cardAdapter.notifyDataSetChanged();
+        toggleDeleteButtonVisibility(false);
+        updateCardQuantities();
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Handle image selection or capture
         if (resultCode == RESULT_OK) {
             if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
                 selectedImageUri = data.getData();
@@ -350,6 +353,11 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 selectedImageUri = getImageUri(getApplicationContext(), imageBitmap);
             }
+
+            cardAdapter.notifyDataSetChanged();
+            loadAlbumCards();
+            updateStatsUI();
+            updateCardQuantities();
         }
     }
 
@@ -383,7 +391,6 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
                 if (selectedImageUri != null) {
                     uploadImageAndUpdateCard(cardId, selectedImageUri, newName);
                 } else {
-                    // Update the title in the local list and Firebase when no new image is selected
                     updateCardInLocalList(cardId, newName, cardToEdit.getImage());
                     updateCardInFirebase(cardId, newName, cardToEdit.getImage());
                 }
@@ -399,7 +406,6 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
         StorageReference storageRef = FirebaseStorage.getInstance().getReference("card_images/" + cardId);
         storageRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    // Update local list and UI after successful upload
                     updateCardInLocalList(cardId, newName, uri.toString());
                     updateCardInFirebase(cardId, newName, uri.toString());
                 }))
@@ -417,7 +423,6 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
 
         cardRef.updateChildren(updates).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                // Update the local list and refresh the UI
                 updateCardInLocalList(cardId, newName, newImageUrl);
                 Toast.makeText(AlbumDetailsActivity.this, "Card updated successfully", Toast.LENGTH_SHORT).show();
             } else {
@@ -430,13 +435,13 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
         for (Card card : cards) {
             if (card.getId().equals(cardId)) {
                 card.setName(newName);
-                if (newImageUrl != null) {  // Update the image URL only if it's not null
+                if (newImageUrl != null) {
                     card.setImage(newImageUrl);
                 }
                 break;
             }
         }
-        cardAdapter.notifyDataSetChanged(); // Refresh the UI
+        cardAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -532,6 +537,58 @@ public class AlbumDetailsActivity extends AppCompatActivity implements CardAdapt
         totalCardsTextView.setText("Ukupno: " + totalCardsInAlbum);
         userCardsTextView.setText("Imaš: " + userCardsInAlbum);
         duplicateCardsTextView.setText("Duplikati: " + duplicateCards);
+
+        updateProgressBar();
+        albumProgressBar.post(() -> positionProgressBarMarkers());
+    }
+
+    private void positionProgressBarMarkers() {
+        int progressBarWidth = albumProgressBar.getWidth();
+
+        setMarkerPosition(marker25, progressBarWidth, 17);
+        setMarkerPosition(marker50, progressBarWidth, 50);
+        setMarkerPosition(marker75, progressBarWidth, 83);
+    }
+
+    private void setMarkerPosition(View marker, int progressBarWidth, int percentage) {
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) marker.getLayoutParams();
+        params.leftMargin = (int) (progressBarWidth * (percentage / 100.0));
+        marker.setLayoutParams(params);
+    }
+
+    private void updateProgressBar() {
+        final ImageView trophyImage1 = findViewById(R.id.trophy_image_1);
+        final ImageView trophyImage2 = findViewById(R.id.trophy_image_2);
+        final ImageView trophyImage3 = findViewById(R.id.trophy_image_3);
+        Log.d("Progressbarz", "updateProgressBar: " + userCardsInAlbum + " / " + totalCardsInAlbum);
+
+        if (totalCardsInAlbum > 0) {
+            int newProgress = (userCardsInAlbum * 100) / totalCardsInAlbum;
+
+            ValueAnimator animator = ValueAnimator.ofInt(albumProgressBar.getProgress(), newProgress);
+            animator.setDuration(1000);
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int animatedValue = (int) animation.getAnimatedValue();
+                    albumProgressBar.setProgress(animatedValue);
+
+                    trophyImage1.setImageResource(animatedValue >= 17 ? R.drawable.bronca : R.drawable.bronca_dark);
+                    trophyImage2.setImageResource(animatedValue >= 50 ? R.drawable.srebrna : R.drawable.srebrna_dark);
+                    trophyImage3.setImageResource(animatedValue >= 83 ? R.drawable.zlatna : R.drawable.zlatna_dark);
+
+                }
+            });
+            animator.start();
+        }
+        else {
+            albumProgressBar.setProgress(0);
+            trophyImage1.setImageResource(R.drawable.bronca_dark);
+            trophyImage2.setImageResource(R.drawable.srebrna_dark);
+            trophyImage3.setImageResource(R.drawable.zlatna_dark);
+            Log.d("Progressbar", "UŠEL U ELSE updateProgressBar: " + userCardsInAlbum + " / " + totalCardsInAlbum);
+        }
     }
 
     private int calculateDuplicates() {

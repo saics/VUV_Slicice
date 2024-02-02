@@ -4,7 +4,14 @@
         android:id="@+id/home"
         android:title="Početna"
         android:icon="@drawable/baseline_home_24"/>
-
+    <item
+        android:id="@+id/trade"
+        android:title="Trade"
+        android:icon="@drawable/baseline_swap_horiz_24"/>
+    <item
+        android:id="@+id/settings"
+        android:title="Postavke"
+        android:icon="@drawable/baseline_settings_24"/>
     <item
         android:id="@+id/logoutFab"
         android:title="Odjava"

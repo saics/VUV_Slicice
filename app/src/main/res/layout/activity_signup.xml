@@ -43,7 +43,7 @@
                 android:background="@drawable/blue_border"
                 android:drawableLeft="@drawable/baseline_person_24"
                 android:drawablePadding="8dp"
-                android:hint="Ime"
+                android:hint="Ime i prezime"
                 android:padding="8dp"
                 android:textColor="@color/Black" />
 

@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validateInputs(String username, String password) {
         if (username.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Username/Password cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Molimo unesite sve podatke!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

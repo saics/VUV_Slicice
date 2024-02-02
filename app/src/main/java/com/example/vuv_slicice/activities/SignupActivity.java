@@ -61,7 +61,7 @@ public class SignupActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         saveUserData(name, email, username);
                     } else {
-                        Toast.makeText(SignupActivity.this, "Registration failed: " + task.getException().getMessage(),
+                        Toast.makeText(SignupActivity.this, "Registracije nije uspjela: " + task.getException().getMessage(),
                                 Toast.LENGTH_LONG).show();
                     }
                 });
@@ -69,22 +69,22 @@ public class SignupActivity extends AppCompatActivity {
 
     private boolean validateInputs(String name, String email, String username, String password) {
         if (name.isEmpty()) {
-            Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ime i prezime ne smiju biti prazni", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Enter a valid email address", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Email nije ispravan", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (username.isEmpty()) {
-            Toast.makeText(this, "Username cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Korisničko ime ne smije biti prazno", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (password.isEmpty() || password.length() < 6) {
-            Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Lozinka mora imati barem 6 znakova", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -99,10 +99,11 @@ public class SignupActivity extends AppCompatActivity {
         usersRef.child(uid).setValue(newUser)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(SignupActivity.this, "Registration successful.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignupActivity.this, "Registracija uspješna!", Toast.LENGTH_SHORT).show();
                         navigateToLoginActivity();
                     } else {
-                        Toast.makeText(SignupActivity.this, "Failed to save user data.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignupActivity.this, "Registracija nije uspjela: " + task.getException().getMessage(),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
     }

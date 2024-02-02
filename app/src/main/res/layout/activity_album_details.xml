@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/album_image"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:scaleType="centerCrop" />
 
     <!-- Edit Album Button -->
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/album_image"
-        android:padding="16dp"
+        android:padding="12dp"
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -100,28 +100,112 @@
         </FrameLayout>
     </LinearLayout>
 
-    <!-- RecyclerView for cards -->
+    <LinearLayout
+        android:id="@+id/trophies_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayout2"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <!-- Trophy 1 -->
+        <ImageView
+            android:id="@+id/trophy_image_1"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:src="@drawable/bronca_dark" />
+
+        <!-- Trophy 2 -->
+        <ImageView
+            android:id="@+id/trophy_image_2"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:src="@drawable/srebrna_dark" />
+
+        <!-- Trophy 3 -->
+        <ImageView
+            android:id="@+id/trophy_image_3"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:src="@drawable/zlatna_dark" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/progress_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/trophies_layout">
+
+        <ProgressBar
+            android:id="@+id/album_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progressDrawable="@drawable/custom_progress_bar"/>
+
+        <!-- Mark at 25% -->
+        <View
+            android:layout_width="2dp"
+            android:layout_height="10dp"
+            android:background="@color/Black"
+            android:id="@+id/marker_25"
+            android:layout_alignTop="@id/album_progress_bar"
+            android:visibility="visible"
+            android:layout_alignBottom="@id/album_progress_bar" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="10dp"
+            android:background="@color/Black"
+            android:id="@+id/marker_50"
+            android:layout_alignTop="@id/album_progress_bar"
+            android:visibility="visible"
+            android:layout_alignBottom="@id/album_progress_bar" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="10dp"
+            android:background="@color/Black"
+            android:id="@+id/marker_75"
+            android:visibility="visible"
+            android:layout_alignTop="@id/album_progress_bar"
+            android:layout_alignBottom="@id/album_progress_bar" />
+
+    </RelativeLayout>
+
+
+
+
+        <!-- RecyclerView for cards -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cards_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="324dp"
-        android:layout_below="@+id/linearLayout2"
+        android:layout_height="271dp"
+        android:layout_below="@+id/progress_bar_layout"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="-1dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="80dp"
         android:orientation="vertical" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:color="@color/Orange"
         android:src="@drawable/baseline_add_circle_24"
         android:visibility="invisible"
-        app:backgroundTint="@color/Orange"/>
+        app:backgroundTint="@color/Orange" />
     <!-- Delete Button -->
     <Button
         android:id="@+id/button_delete_cards"

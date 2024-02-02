@@ -13,6 +13,17 @@
         android:layout_height="match_parent"
         android:background="@drawable/pagebkg">
 
+        <TextView
+            android:id="@+id/tvNoTrades"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="😔 Nema dostupnih razmjena."
+            android:textSize="28sp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+
         <!-- Toolbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -28,9 +39,10 @@
             android:padding="16dp"
             android:layout_below="@id/toolbar" />
 
+
         <!-- Floating Action Button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_album"
+            android:id="@+id/fab_add_trade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -39,8 +51,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/baseline_add_circle_24"
-            android:visibility="invisible"
+            android:src="@drawable/baseline_swap_horiz_24"
             app:backgroundTint="@color/Orange" />
 
         <!-- ProgressBar -->
@@ -50,6 +61,13 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="gone"/>
+
+        <FrameLayout
+            android:id="@+id/trade_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"/>
+
     </RelativeLayout>
 
     <!-- Navigation View for the drawer -->

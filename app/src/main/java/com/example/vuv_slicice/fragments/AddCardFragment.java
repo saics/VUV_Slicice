@@ -2,6 +2,7 @@ package com.example.vuv_slicice.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
@@ -203,7 +204,6 @@ public class AddCardFragment extends DialogFragment {
         DatabaseReference cardsRef = FirebaseDatabase.getInstance().getReference("cards");
         String cardId = cardsRef.push().getKey();
 
-        //Map containing only the fields I want to save
         Map<String, Object> cardData = new HashMap<>();
         cardData.put("name", cardName);
         cardData.put("image", imageUrl);
@@ -216,6 +216,8 @@ public class AddCardFragment extends DialogFragment {
                 newCard.setSelected(false);
 
                 notifyCardCreated(newCard);
+                addCardToAlbum(cardId);
+                getActivity().setResult(Activity.RESULT_OK); // Set result for the calling activity
                 dismiss();
             } else {
                 Toast.makeText(getContext(), "Failed to save card", Toast.LENGTH_SHORT).show();
@@ -223,4 +225,15 @@ public class AddCardFragment extends DialogFragment {
         });
     }
 
+    private void addCardToAlbum(String cardId) {
+        DatabaseReference albumCardsRef = FirebaseDatabase.getInstance().getReference("albums")
+                .child(albumId).child("cards").child(cardId);
+        albumCardsRef.setValue(true).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d("AddCardFragment", "Card successfully added to album");
+            } else {
+                Log.e("AddCardFragment", "Error adding card to album");
+            }
+        });
+    }
 }

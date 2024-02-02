@@ -126,12 +126,12 @@ public class CreateAlbumActivity extends AppCompatActivity {
 
     private void showProgressDialog() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Saving album..."); // Customize this message
+        progressDialog.setMessage("Spremanje albuma..."); // Customize this message
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(true);
         progressDialog.setOnCancelListener(dialog -> {
             // Handle the cancellation logic here
-            Toast.makeText(CreateAlbumActivity.this, "Album saving cancelled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreateAlbumActivity.this, "Spremanje albuma prekinuto", Toast.LENGTH_SHORT).show();
             // Additional cancellation handling code (if necessary)
         });
         progressDialog.show();
